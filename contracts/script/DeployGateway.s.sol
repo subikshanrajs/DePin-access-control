@@ -25,13 +25,16 @@ contract DeployGateway is Script {
         address payable treasury; // ETH withdrawal destination
     }
 
-    function _loadConfig() internal view returns (DeployConfig memory config) {
-        address envOwner = vm.envOr("DEPLOY_OWNER", address(0));
-        address envTreasury = vm.envOr("DEPLOY_TREASURY", address(0));
+    function _loadConfig(address defaultOwner) internal view returns (DeployConfig memory config) {
+        config.owner = defaultOwner;
+        config.treasury = payable(defaultOwner);
 
-        // Fallback: use the deployer's own address (for dev / testnet)
-        config.owner    = envOwner    != address(0) ? envOwner    : msg.sender;
-        config.treasury = payable(envTreasury != address(0) ? envTreasury : msg.sender);
+        if (vm.envExists("DEPLOY_OWNER")) {
+            config.owner = vm.envAddress("DEPLOY_OWNER");
+        }
+        if (vm.envExists("DEPLOY_TREASURY")) {
+            config.treasury = payable(vm.envAddress("DEPLOY_TREASURY"));
+        }
     }
 
     // =========================================================================
@@ -39,7 +42,9 @@ contract DeployGateway is Script {
     // =========================================================================
 
     function run() public {
-        DeployConfig memory config = _loadConfig();
+        uint256 deployerPrivKey = vm.envUint("PRIVATE_KEY");
+        address deployerAddress = vm.addr(deployerPrivKey);
+        DeployConfig memory config = _loadConfig(deployerAddress);
 
         console2.log("=== DePIN Access Protocol Deployment ===");
         console2.log("Network:  ", block.chainid);
@@ -48,7 +53,6 @@ contract DeployGateway is Script {
         console2.log("Treasury: ", config.treasury);
         console2.log("Block:    ", block.number);
 
-        uint256 deployerPrivKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivKey);
 
         // 1. Deploy SessionRegistry (pure data store)
