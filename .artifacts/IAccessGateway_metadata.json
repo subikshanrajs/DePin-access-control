@@ -1,0 +1,605 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "ArrayLengthMismatch",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ContractPaused",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "required",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "sent",
+						"type": "uint256"
+					}
+				],
+				"name": "InsufficientPayment",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidDuration",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidPrice",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tierId",
+						"type": "uint256"
+					}
+				],
+				"name": "InvalidTier",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "deviceId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "uint256",
+						"name": "expiresAt",
+						"type": "uint256"
+					}
+				],
+				"name": "SessionAlreadyActive",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "deviceId",
+						"type": "bytes32"
+					}
+				],
+				"name": "SessionNotFound",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tierId",
+						"type": "uint256"
+					}
+				],
+				"name": "TierInactive",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "WithdrawFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroAddress",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "deviceId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newExpiresAt",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountPaid",
+						"type": "uint256"
+					}
+				],
+				"name": "AccessExtended",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "deviceId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "tierId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "expiresAt",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountPaid",
+						"type": "uint256"
+					}
+				],
+				"name": "AccessGranted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "deviceId",
+						"type": "bytes32"
+					}
+				],
+				"name": "AccessRevoked",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "paused",
+						"type": "bool"
+					}
+				],
+				"name": "EmergencyPause",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "tierId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "durationSeconds",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "priceWei",
+						"type": "uint256"
+					}
+				],
+				"name": "TierUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Withdrawn",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "deviceId",
+						"type": "bytes32"
+					}
+				],
+				"name": "checkAccess",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "expiresAt",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "deviceId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tierId",
+						"type": "uint256"
+					}
+				],
+				"name": "extendAccess",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllTiers",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "durationSeconds",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "priceWei",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "active",
+								"type": "bool"
+							},
+							{
+								"internalType": "string",
+								"name": "label",
+								"type": "string"
+							}
+						],
+						"internalType": "struct IAccessGateway.Tier[]",
+						"name": "tiers",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tierId",
+						"type": "uint256"
+					}
+				],
+				"name": "getTier",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "durationSeconds",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "priceWei",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "active",
+								"type": "bool"
+							},
+							{
+								"internalType": "string",
+								"name": "label",
+								"type": "string"
+							}
+						],
+						"internalType": "struct IAccessGateway.Tier",
+						"name": "tier",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "deviceId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tierId",
+						"type": "uint256"
+					}
+				],
+				"name": "purchaseAccess",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "deviceId",
+						"type": "bytes32"
+					}
+				],
+				"name": "remainingTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "remainingSeconds",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "deviceId",
+						"type": "bytes32"
+					}
+				],
+				"name": "revokeAccess",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "togglePause",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdraw",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Implementations must emit the required events and implement all functions",
+			"events": {
+				"AccessGranted(address,bytes32,uint256,uint256,uint256)": {
+					"params": {
+						"amountPaid": "ETH paid in wei",
+						"deviceId": "Off-chain identifier (MAC address hash, device fingerprint)",
+						"expiresAt": "Block timestamp when access expires",
+						"tierId": "The pricing tier selected",
+						"user": "The wallet address purchasing access"
+					}
+				}
+			},
+			"kind": "dev",
+			"methods": {
+				"checkAccess(address,bytes32)": {
+					"params": {
+						"deviceId": "Device identifier",
+						"user": "Wallet address of the session owner"
+					},
+					"returns": {
+						"active": "  Whether access is currently valid",
+						"expiresAt": "Unix timestamp of expiry (0 if not active)"
+					}
+				},
+				"extendAccess(bytes32,uint256)": {
+					"params": {
+						"deviceId": "The device to extend access for",
+						"tierId": "Tier to extend by"
+					}
+				},
+				"getAllTiers()": {
+					"returns": {
+						"tiers": " Array of all tiers"
+					}
+				},
+				"getTier(uint256)": {
+					"params": {
+						"tierId": "Tier index"
+					},
+					"returns": {
+						"tier": "  The Tier struct"
+					}
+				},
+				"purchaseAccess(bytes32,uint256)": {
+					"params": {
+						"deviceId": "Off-chain device identifier (keccak256 of MAC or fingerprint)",
+						"tierId": "Tier to purchase"
+					}
+				},
+				"remainingTime(address,bytes32)": {
+					"params": {
+						"deviceId": "Device identifier",
+						"user": "Wallet address"
+					},
+					"returns": {
+						"remainingSeconds": " Remaining access time (0 if expired or not found)"
+					}
+				},
+				"revokeAccess(address,bytes32)": {
+					"params": {
+						"deviceId": "Device identifier",
+						"user": "Session owner wallet"
+					}
+				}
+			},
+			"title": "IAccessGateway",
+			"version": 1
+		},
+		"userdoc": {
+			"events": {
+				"AccessExtended(address,bytes32,uint256,uint256)": {
+					"notice": "Emitted when a session is extended"
+				},
+				"AccessGranted(address,bytes32,uint256,uint256,uint256)": {
+					"notice": "Emitted when a new access session is granted"
+				},
+				"AccessRevoked(address,bytes32)": {
+					"notice": "Emitted when a session is explicitly revoked by the owner"
+				},
+				"EmergencyPause(bool)": {
+					"notice": "Emitted when the contract is paused/unpaused"
+				},
+				"TierUpdated(uint256,uint256,uint256)": {
+					"notice": "Emitted when a pricing tier is created or updated"
+				},
+				"Withdrawn(address,uint256)": {
+					"notice": "Emitted when accumulated ETH is withdrawn"
+				}
+			},
+			"kind": "user",
+			"methods": {
+				"checkAccess(address,bytes32)": {
+					"notice": "Check if a device currently has valid access"
+				},
+				"extendAccess(bytes32,uint256)": {
+					"notice": "Extend an existing active session"
+				},
+				"getAllTiers()": {
+					"notice": "Get all active tiers"
+				},
+				"getTier(uint256)": {
+					"notice": "Get tier details"
+				},
+				"purchaseAccess(bytes32,uint256)": {
+					"notice": "Purchase access for a device"
+				},
+				"remainingTime(address,bytes32)": {
+					"notice": "Returns remaining seconds of access for a device"
+				},
+				"revokeAccess(address,bytes32)": {
+					"notice": "Revoke access for a device (owner only, emergency use)"
+				},
+				"togglePause()": {
+					"notice": "Toggle emergency pause"
+				},
+				"withdraw()": {
+					"notice": "Withdraw accumulated ETH to treasury"
+				}
+			},
+			"notice": "Interface for the time-boxed access gateway protocol",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/src/interfaces/IAccessGateway.sol": "IAccessGateway"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/src/interfaces/IAccessGateway.sol": {
+			"keccak256": "0x537c5744f42fe8aaae87e9a5169064d5adf311ec59e7a3c94fcede427952173c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8017825cf89ee2b1d33b57273d9082f5dbca83f5994394fe5773468706f9766b",
+				"dweb:/ipfs/QmcpZiLTpTSzRJbhw4Zc7Sg1YvxXdfeKLoLVNroeJdkGdR"
+			]
+		}
+	},
+	"version": 1
+}

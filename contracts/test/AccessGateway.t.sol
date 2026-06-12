@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {Test} from "forge-std/Test.sol";
+import {Test, console2} from "forge-std/Test.sol";
 import {AccessGateway} from "../src/AccessGateway.sol";
 import {SessionRegistry} from "../src/SessionRegistry.sol";
 import {IAccessGateway} from "../src/interfaces/IAccessGateway.sol";
@@ -87,8 +87,13 @@ contract AccessGatewayTest is Test {
         new AccessGateway(address(registry), payable(address(0)), owner);
     }
 
+    /// @dev OpenZeppelin's Ownable(_owner) base constructor runs BEFORE our
+    ///      constructor body, so its OwnableInvalidOwner check fires first.
+    ///      Our own ZeroAddress() check for _owner is unreachable but harmless.
     function test_Constructor_RejectsZeroOwner() public {
-        vm.expectRevert(IAccessGateway.ZeroAddress.selector);
+        vm.expectRevert(
+            abi.encodeWithSignature("OwnableInvalidOwner(address)", address(0))
+        );
         new AccessGateway(address(registry), treasury, address(0));
     }
 
@@ -377,13 +382,24 @@ contract AccessGatewayTest is Test {
     //                              REENTRANCY GUARD
     // =========================================================================
 
+    /// @dev To trigger reentrancy, the attacker must OVERPAY. An exact payment
+    ///      produces zero refund, so receive() (where the re-entrant call lives)
+    ///      is never invoked and nothing reverts. Overpaying triggers the
+    ///      refund `.call{value: excess}("")`, which calls receive(), which
+    ///      attempts to re-enter purchaseAccess(). That nested call is blocked
+    ///      by nonReentrant (ReentrancyGuardReentrantCall), causing the refund
+    ///      .call to return ok=false, which bubbles up as WithdrawFailed().
     function test_ReentrancyGuard_OnPurchase() public {
         ReentrantAttacker re = new ReentrantAttacker(payable(address(gateway)));
         vm.deal(address(re), 10 ether);
 
-        // The attack should fail without draining funds
+        // Overpay by 0.0005 ETH so the refund path fires and triggers receive()
         vm.expectRevert();
-        re.attack{value: PRICE_1H}();
+        re.attack{value: PRICE_1H + 0.0005 ether}();
+
+        // Funds should not be drained / no session should have been created
+        (bool active,) = gateway.checkAccess(address(re), keccak256("evil"));
+        assertFalse(active, "Reentrant purchase must not succeed");
     }
 
     // =========================================================================
@@ -474,19 +490,22 @@ contract AccessGatewayTest is Test {
 contract ReentrantAttacker {
     AccessGateway private target;
     bytes32 private constant DEVICE = keccak256("evil");
+    uint256 private constant TIER_PRICE = 0.001 ether;
 
     constructor(address payable _target) {
         target = AccessGateway(_target);
     }
 
+    /// @dev Forwards whatever ETH it's given. If this is more than the tier
+    ///      price, the gateway will refund the excess via .call, which
+    ///      invokes receive() below — that's where the re-entrancy attempt happens.
     function attack() external payable {
-        target.purchaseAccess{value: 0.001 ether}(DEVICE, 0);
+        target.purchaseAccess{value: msg.value}(DEVICE, 0);
     }
 
     receive() external payable {
-        // Attempt re-entry on receive
-        if (address(target).balance >= 0.001 ether) {
-            target.purchaseAccess{value: 0.001 ether}(DEVICE, 0);
-        }
+        // Re-entrant attempt: try to purchase again mid-call.
+        // This MUST revert due to nonReentrant on purchaseAccess.
+        target.purchaseAccess{value: TIER_PRICE}(DEVICE, 0);
     }
 }
