@@ -1,0 +1,9 @@
+# Ignore all hidden files and directories
+.*
+
+# Keep the repository ignore file itself
+!.gitignore
+
+# Ignore build, deployment, and dependency directories
+/.deps/
+/.artifacts/

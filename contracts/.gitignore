@@ -1,22 +1,21 @@
-# Compiler files
-cache/
-out/
-lib/
-node_modules/
-deployments/
-broadcast/
-github/
-
-# Ignores development broadcast logs
-!/broadcast
-/broadcast/*/31337/
-/broadcast/**/dry-run/
+# Ignore build, deployment, and dependency directories
+/.github/
+/broadcast/
+/cache/
+/deployments/
+/lib/
+/node_modules/
+/out/
 
 # Docs
 docs/
 
 # Dotenv file
 .env
-.gitignore
-.gitmodules
+
+# Ignore all hidden files and directories
+.*
+
+# Keep the repository ignore file itself
+!.gitignore
 
