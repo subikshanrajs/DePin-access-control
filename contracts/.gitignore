@@ -5,6 +5,7 @@ lib/
 node_modules/
 deployments/
 broadcast/
+github/
 
 # Ignores development broadcast logs
 !/broadcast
@@ -16,3 +17,6 @@ docs/
 
 # Dotenv file
 .env
+.gitignore
+.gitmodules
+

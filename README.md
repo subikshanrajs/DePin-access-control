@@ -173,7 +173,6 @@ Defines all structs (`Tier`), events (`AccessGranted`, `AccessExtended`, `Access
 - **Integer-only arithmetic** — no floating point; `remainingTime` is guarded against underflow.
 - **Bounded loops** — `MAX_TIERS = 32` prevents unbounded gas costs in tier iteration.
 
-> ⚠️ **A note on the `Ownable(_owner)` zero-address check:** OpenZeppelin's `Ownable` constructor runs *before* `AccessGateway`'s constructor body, so passing `address(0)` as the owner reverts with OZ's `OwnableInvalidOwner(address(0))` — not the contract's own `ZeroAddress()` error. This is expected and was accounted for in the test suite (`test_Constructor_RejectsZeroOwner`).
 
 ---
 
@@ -208,7 +207,6 @@ Tiers are bounded: `MIN_DURATION = 60s`, `MAX_DURATION = 30 days`, `MAX_TIERS = 
   - https://www.alchemy.com/faucets/arbitrum-sepolia
 - (Optional) A free **Arbiscan API key** from https://sepolia.arbiscan.io → My Profile → API Keys, for contract verification
 
-> 🐧 **WSL users:** Clone/move this project onto your **Linux filesystem** (e.g. `~/Depin-accessctrl`), *not* `/mnt/c/Users/...`. npm installs on `/mnt/c` frequently fail with `ENOTEMPTY` rename errors due to how WSL bridges the Windows filesystem. See [Troubleshooting](#troubleshooting).
 
 ### 2. Smart Contracts (Foundry)
 
