@@ -1,5 +1,4 @@
 # Ignore build, deployment, and dependency directories
-/.github/
 /broadcast/
 /cache/
 /deployments/
@@ -16,6 +15,5 @@ docs/
 # Ignore all hidden files and directories
 .*
 
-# Keep the repository ignore file itself
-!.gitignore
+
 

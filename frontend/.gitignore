@@ -26,5 +26,3 @@ dist-ssr
 # Ignore all hidden files and directories
 .*
 
-# Keep the repository ignore file itself
-!.gitignore

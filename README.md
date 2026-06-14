@@ -2,6 +2,18 @@
 
 **Decentralized, time-boxed network access on Arbitrum.** Pay ETH, get instant Wi-Fi access for a fixed duration. No accounts, no passwords, no centralized billing — just a wallet and a smart contract.
 
+---
+
+## Applications
+
+NetPass can be used to monetize or gate access in real-world infrastructure where time-limited access is valuable.
+
+- Public or guest Wi-Fi hotspots at cafes, coworking spaces, hotels, and event venues.
+- Community mesh networks and decentralized internet kiosks.
+- Paid access for shared EV charging stations, lockers, or coworking resources.
+- Time-based access controls for gyms, pools, and coworking desks.
+- Proof-of-payment access for kiosk services, vending machines, or temporary events.
+
 ```
 ┌──────────────────┐   1. Pay ETH (purchaseAccess)   ┌───────────────────────────┐
 │   User Frontend   │ ───────────────────────────────▶│   AccessGateway.sol        │
@@ -64,6 +76,8 @@ NetPass is a **DePIN (Decentralized Physical Infrastructure Network) access cont
 6. When the session expires, the worker (via a polling safety net) revokes access automatically.
 
 Everything is verifiable on-chain. The blockchain is the source of truth — the worker rebuilds its session cache from chain events on every restart.
+
+
 
 ---
 
@@ -523,26 +537,6 @@ Transient Arbitrum Sepolia gas-estimation lag — MetaMask quoted a `maxFeePerGa
 
 ---
 
-## Demo Recording Guide
-
-A clean ~90-second flow that demonstrates the full on-chain → off-chain → "hardware" loop:
-
-1. **Intro** (5s) — briefly show the architecture diagram, narrate: *"User pays ETH → smart contract on Arbitrum tracks expiry → off-chain worker would configure a router."*
-2. **Connect wallet** — MetaMask on Arbitrum Sepolia.
-3. **Select a tier** (e.g. "1 Hour — 0.0010 ETH") → click **Buy**.
-4. **Confirm in MetaMask** — show the transaction being signed.
-5. **Cut to the worker terminal** — within seconds, the `AccessGranted` event log and `[SIM] GRANT ACCESS` line appear, including the simulated `iptables` MAC-filter command and computed expiry.
-6. **Cut back to the frontend** — session card now shows **Active**, a live countdown (`59m 33s remaining`), and the expiry timestamp.
-7. *(Optional)* Open the **Arbiscan Events tab** for the `AccessGateway` address — show the `AccessGranted` event with raw on-chain `user`, `deviceId`, `tierId`, `expiresAt`, `amountPaid` as independent proof.
-8. *(Optional)* Click **Extend for 1 hr** — show the countdown jump up and a second `AccessExtended` event logged by the worker.
-
-**Recording tools:** OBS Studio (free, cross-platform) or Windows Game Bar (`Win+G`) — tile the browser, worker terminal, and (optionally) Arbiscan side by side.
-
-**Device ID field:** leave it blank for the demo — it defaults to your connected wallet address (one device per wallet), which is the simplest and clearest story to tell. The "Custom device" field exists for granting access to a *different* physical device (e.g. via MAC address) and is worth mentioning if asked about real-world deployment, without needing to demo it live.
-
-**If a transient gas error appears mid-recording:** just say *"testnet gas estimation occasionally lags — let's retry"* and click again. This is a well-known, expected occurrence on public L2 testnets.
-
----
 
 ## Roadmap / Future Work
 
