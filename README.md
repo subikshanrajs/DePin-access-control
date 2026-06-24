@@ -57,7 +57,6 @@ NetPass can be used to monetize or gate access in real-world infrastructure wher
 - [Operator Commands](#operator-commands)
 - [Hardware Integration](#hardware-integration)
 - [Troubleshooting](#troubleshooting)
-- [Demo Recording Guide](#demo-recording-guide)
 - [Roadmap / Future Work](#roadmap--future-work)
 
 ---
@@ -537,6 +536,11 @@ Transient Arbitrum Sepolia gas-estimation lag — MetaMask quoted a `maxFeePerGa
 
 ---
 
+## Demo Recording Guide
+
+Watch the demo video on YouTube:
+
+- https://youtu.be/NSA59HJCC4w
 
 ## Roadmap / Future Work
 
